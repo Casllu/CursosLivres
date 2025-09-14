@@ -1,16 +1,18 @@
 package com.estagio.cursosLivres.controller;
 
 import com.estagio.cursosLivres.dto.UserDTO;
+import com.estagio.cursosLivres.dto.UserInsertDTO;
 import com.estagio.cursosLivres.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/users")
@@ -32,6 +34,17 @@ public class UserController {
         UserDTO dto = userService.findById(id);
 
         return ResponseEntity.ok().body(dto);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO newDto = userService.insert(dto);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(newDto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(newDto);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO', 'ROLE_PROF')")

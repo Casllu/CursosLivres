@@ -1,6 +1,8 @@
 package com.estagio.cursosLivres.services;
 
+import com.estagio.cursosLivres.dto.RoleDTO;
 import com.estagio.cursosLivres.dto.UserDTO;
+import com.estagio.cursosLivres.dto.UserInsertDTO;
 import com.estagio.cursosLivres.entities.Role;
 import com.estagio.cursosLivres.entities.User;
 import com.estagio.cursosLivres.projections.UserDetailsProjection;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly = true)
@@ -42,6 +47,21 @@ public class UserService implements UserDetailsService {
     public UserDTO findById(Long id) {
         Optional<User> obj = userRepository.findById(id);
         User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+
+        return new UserDTO(entity);
+    }
+
+    @Transactional
+    public UserDTO insert(UserInsertDTO dto) {
+        User entity = new User();
+        copyDtoToEntity(dto, entity);
+
+        entity.getRoles().clear();
+        Role role = roleRepository.findByAuthority("ROLE_ALUNO");
+        entity.getRoles().add(role);
+
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        entity = userRepository.save(entity);
 
         return new UserDTO(entity);
     }
@@ -70,6 +90,18 @@ public class UserService implements UserDetailsService {
         User entity = authService.authenticated();
 
         return new UserDTO(entity);
+    }
+
+    private void copyDtoToEntity(UserDTO dto, User entity) {
+        entity.setFirstName(dto.getNome());
+        entity.setEmail(dto.getEmail());
+
+
+        entity.getRoles().clear();
+        for (RoleDTO roleDTO : dto.getRoles()) {
+            Role role = roleRepository.getReferenceById(roleDTO.getId());
+            entity.getRoles().add(role);
+        }
     }
 
 
