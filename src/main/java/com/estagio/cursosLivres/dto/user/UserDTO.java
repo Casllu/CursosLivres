@@ -1,5 +1,6 @@
-package com.estagio.cursosLivres.dto;
+package com.estagio.cursosLivres.dto.user;
 
+import com.estagio.cursosLivres.dto.role.RoleDTO;
 import com.estagio.cursosLivres.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

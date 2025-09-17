@@ -1,7 +1,8 @@
 package com.estagio.cursosLivres.controller;
 
-import com.estagio.cursosLivres.dto.UserDTO;
-import com.estagio.cursosLivres.dto.UserInsertDTO;
+import com.estagio.cursosLivres.dto.user.UserDTO;
+import com.estagio.cursosLivres.dto.user.UserInsertDTO;
+import com.estagio.cursosLivres.dto.user.UserUpdateDTO;
 import com.estagio.cursosLivres.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,6 @@ public class UserController {
         return ResponseEntity.ok().body(dto);
     }
 
-
     @PostMapping
     public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
         UserDTO newDto = userService.insert(dto);
@@ -47,6 +47,21 @@ public class UserController {
         return ResponseEntity.created(uri).body(newDto);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+        UserDTO newDto = userService.update(id, dto);
+
+        return ResponseEntity.ok().body(newDto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO', 'ROLE_PROF')")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> findMe() {
@@ -54,7 +69,4 @@ public class UserController {
 
         return ResponseEntity.ok(dto);
     }
-
-
-
 }

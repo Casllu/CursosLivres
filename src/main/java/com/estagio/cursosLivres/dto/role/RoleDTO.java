@@ -1,4 +1,4 @@
-package com.estagio.cursosLivres.dto;
+package com.estagio.cursosLivres.dto.role;
 
 
 import com.estagio.cursosLivres.entities.Role;

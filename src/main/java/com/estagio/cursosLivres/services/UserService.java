@@ -1,15 +1,19 @@
 package com.estagio.cursosLivres.services;
 
-import com.estagio.cursosLivres.dto.RoleDTO;
-import com.estagio.cursosLivres.dto.UserDTO;
-import com.estagio.cursosLivres.dto.UserInsertDTO;
+import com.estagio.cursosLivres.dto.user.UserUpdateDTO;
+import com.estagio.cursosLivres.dto.role.RoleDTO;
+import com.estagio.cursosLivres.dto.user.UserDTO;
+import com.estagio.cursosLivres.dto.user.UserInsertDTO;
 import com.estagio.cursosLivres.entities.Role;
 import com.estagio.cursosLivres.entities.User;
 import com.estagio.cursosLivres.projections.UserDetailsProjection;
 import com.estagio.cursosLivres.repositories.RoleRepository;
 import com.estagio.cursosLivres.repositories.UserRepository;
+import com.estagio.cursosLivres.services.exceptions.DatabaseException;
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -66,6 +71,19 @@ public class UserService implements UserDetailsService {
         return new UserDTO(entity);
     }
 
+    @Transactional
+    public UserDTO update(Long id, UserUpdateDTO dto) {
+        try {
+            User entity = userRepository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            entity = userRepository.save(entity);
+
+            return new UserDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Id não encontrado " + id);
+        }
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -86,6 +104,19 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+
+        if(!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+        try {
+            userRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+
     public UserDTO findMe() {
         User entity = authService.authenticated();
 
@@ -96,13 +127,10 @@ public class UserService implements UserDetailsService {
         entity.setFirstName(dto.getNome());
         entity.setEmail(dto.getEmail());
 
-
         entity.getRoles().clear();
         for (RoleDTO roleDTO : dto.getRoles()) {
             Role role = roleRepository.getReferenceById(roleDTO.getId());
             entity.getRoles().add(role);
         }
     }
-
-
 }

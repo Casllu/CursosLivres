@@ -1,9 +1,11 @@
-package com.estagio.cursosLivres.dto;
+package com.estagio.cursosLivres.dto.user;
 
 
+import com.estagio.cursosLivres.services.validation.UserInsertValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@UserInsertValid
 public class UserInsertDTO extends UserDTO{
 
     @NotBlank(message = "Campo obrigatório")
