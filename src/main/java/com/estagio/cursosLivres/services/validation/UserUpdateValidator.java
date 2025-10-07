@@ -1,6 +1,6 @@
 package com.estagio.cursosLivres.services.validation;
 
-import com.estagio.cursosLivres.config.exception.FieldMessage;
+import com.estagio.cursosLivres.config.exceptions.FieldMessage;
 import com.estagio.cursosLivres.dto.user.UserUpdateDTO;
 import com.estagio.cursosLivres.entities.User;
 import com.estagio.cursosLivres.repositories.UserRepository;

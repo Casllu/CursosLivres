@@ -1,4 +1,4 @@
-package com.estagio.cursosLivres.config.exception;
+package com.estagio.cursosLivres.config.exceptions;
 
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

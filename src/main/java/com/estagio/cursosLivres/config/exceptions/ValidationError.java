@@ -1,4 +1,4 @@
-package com.estagio.cursosLivres.config.exception;
+package com.estagio.cursosLivres.config.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

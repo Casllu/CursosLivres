@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -17,26 +18,30 @@ public class User implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
+    private String lastName;
+    @Column(unique = true)
     private String email;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name= "tb_user_role",
+            name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<Role>();
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(mappedBy = "alunos")
+    private Set<Curso> cursos = new HashSet<>();
 
     public User() {
     }
 
-    public User(Long id, String firstName, String email, String password, Set<Role> roles) {
+    public User(Long id, String firstName, String lastName, String email, String password) {
         this.id = id;
         this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
     public Long getId() {
@@ -55,6 +60,13 @@ public class User implements UserDetails, Serializable {
         this.firstName = firstName;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getEmail() {
         return email;
@@ -62,6 +74,14 @@ public class User implements UserDetails, Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Curso> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(Set<Curso> cursos) {
+        this.cursos = cursos;
     }
 
     @Override
@@ -98,6 +118,19 @@ public class User implements UserDetails, Serializable {
         return true;
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public boolean hasRole(String roleName) {
+        for (Role role : roles) {
+            if (role.getAuthority().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -106,14 +139,15 @@ public class User implements UserDetails, Serializable {
         return roles;
     }
 
-    public void addRole(Role role) {roles.add(role);}
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
 
-    public boolean hasRole(String rolename) {
-        for (Role role : roles) {
-            if(role.getAuthority().equals(rolename)) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

@@ -57,12 +57,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDTO insert(UserInsertDTO dto) {
+    public UserDTO insert(UserInsertDTO dto, String authority) {
         User entity = new User();
         copyDtoToEntity(dto, entity);
 
         entity.getRoles().clear();
-        Role role = roleRepository.findByAuthority("ROLE_ALUNO");
+        Role role = roleRepository.findByAuthority(authority);
         entity.getRoles().add(role);
 
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -124,7 +124,8 @@ public class UserService implements UserDetailsService {
     }
 
     private void copyDtoToEntity(UserDTO dto, User entity) {
-        entity.setFirstName(dto.getNome());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
         entity.setEmail(dto.getEmail());
 
         entity.getRoles().clear();

@@ -37,9 +37,20 @@ public class UserController {
         return ResponseEntity.ok().body(dto);
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
-        UserDTO newDto = userService.insert(dto);
+    @PostMapping(value = "/aluno")
+    public ResponseEntity<UserDTO> insertAluno(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO newDto = userService.insert(dto, "ROLE_ALUNO");
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(newDto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(newDto);
+    }
+
+    @PostMapping(value = "/professores")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<UserDTO> insertProfessor(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO newDto = userService.insert(dto,  "ROLE_PROFESSOR");
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(newDto.getId()).toUri();
@@ -62,7 +73,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO', 'ROLE_PROF')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO', 'ROLE_PROFESSOR')")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> findMe() {
         UserDTO dto = userService.findMe();
