@@ -98,4 +98,12 @@ public class Curso {
     public void setAlunos(Set<User> alunos) {
         this.alunos = alunos;
     }
+
+    public User getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(User professor) {
+        this.professor = professor;
+    }
 }
