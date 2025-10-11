@@ -1,6 +1,7 @@
 package com.estagio.cursosLivres.config.exceptions;
 
 import com.estagio.cursosLivres.services.exceptions.BusinessException;
+import com.estagio.cursosLivres.services.exceptions.DatabaseException;
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,19 @@ public class ResourceExceptionHandler {
 
         return ResponseEntity.status(status).body(err);
 
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Database exception");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

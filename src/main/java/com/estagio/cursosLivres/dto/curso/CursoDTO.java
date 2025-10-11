@@ -28,14 +28,14 @@ public class CursoDTO {
     private BigDecimal preco;
 
     @NotNull(message = "Campo obrigatório")
-    private boolean certificadoDisponivel;
+    private Boolean certificadoDisponivel;
 
     @NotNull(message = "Professor é obrigatório")
     private UserMinDTO professor;
 
     public CursoDTO() {}
 
-    public CursoDTO(Long id, String nome, String descricao, Integer cargaHoraria, BigDecimal preco, boolean certificadoDisponivel,  UserMinDTO professor) {
+    public CursoDTO(Long id, String nome, String descricao, Integer cargaHoraria, BigDecimal preco, Boolean certificadoDisponivel,  UserMinDTO professor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -96,11 +96,11 @@ public class CursoDTO {
         this.preco = preco;
     }
 
-    public boolean isCertificadoDisponivel() {
+    public Boolean isCertificadoDisponivel() {
         return certificadoDisponivel;
     }
 
-    public void setCertificadoDisponivel(boolean certificadoDisponivel) {
+    public void setCertificadoDisponivel(Boolean certificadoDisponivel) {
         this.certificadoDisponivel = certificadoDisponivel;
     }
 

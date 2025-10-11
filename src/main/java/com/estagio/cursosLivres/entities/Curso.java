@@ -18,7 +18,7 @@ public class Curso {
     private String descricao    ;
     private Integer cargaHoraria;
     private BigDecimal preco;
-    private boolean certificadoDisponivel;
+    private Boolean certificadoDisponivel;
 
     @ManyToOne
     @JoinColumn(name = "professor_id")
@@ -83,11 +83,11 @@ public class Curso {
         this.preco = preco;
     }
 
-    public boolean isCertificadoDisponivel() {
+    public Boolean isCertificadoDisponivel() {
         return certificadoDisponivel;
     }
 
-    public void setCertificadoDisponivel(boolean certificadoDisponivel) {
+    public void setCertificadoDisponivel(Boolean  certificadoDisponivel) {
         this.certificadoDisponivel = certificadoDisponivel;
     }
 
