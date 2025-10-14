@@ -15,6 +15,7 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(columnDefinition = "TEXT")
     private String descricao    ;
     private Integer cargaHoraria;
     private BigDecimal preco;
@@ -24,12 +25,8 @@ public class Curso {
     @JoinColumn(name = "professor_id")
     private User professor;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tb_curso_aluno",
-            joinColumns = @JoinColumn(name = "curso_id"),
-            inverseJoinColumns = @JoinColumn(name = "aluno_id"))
-    private Set<User> alunos = new HashSet<>();
+    @OneToMany(mappedBy = "curso")
+    private Set<Matricula> matriculas = new HashSet<>();
 
     public Curso() {
     }
@@ -91,12 +88,12 @@ public class Curso {
         this.certificadoDisponivel = certificadoDisponivel;
     }
 
-    public Set<User> getAlunos() {
-        return alunos;
+    public Set<Matricula> getMatriculas() {
+        return matriculas;
     }
 
-    public void setAlunos(Set<User> alunos) {
-        this.alunos = alunos;
+    public void setMatriculas(Set<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
 
     public User getProfessor() {

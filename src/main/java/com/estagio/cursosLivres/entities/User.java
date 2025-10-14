@@ -30,8 +30,8 @@ public class User implements UserDetails, Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(mappedBy = "alunos")
-    private Set<Curso> cursos = new HashSet<>();
+    @OneToMany(mappedBy = "aluno")
+    private Set<Matricula> matriculas = new HashSet<>();
 
     public User() {
     }
@@ -76,12 +76,12 @@ public class User implements UserDetails, Serializable {
         this.email = email;
     }
 
-    public Set<Curso> getCursos() {
-        return cursos;
+    public Set<Matricula> getMatriculas() {
+        return matriculas;
     }
 
-    public void setCursos(Set<Curso> cursos) {
-        this.cursos = cursos;
+    public void setMatriculas(Set<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
 
     @Override

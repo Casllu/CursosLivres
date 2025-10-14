@@ -51,23 +51,12 @@ INSERT INTO tb_curso (nome, descricao, carga_horaria, preco, certificado_disponi
 -- supondo id=4:
 INSERT INTO tb_curso_presencial (id, local, data_inicio, data_fim, min_alunos, max_alunos) VALUES (4, 'Lab 2 - Bloco B', '2025-11-03 10:00:00', '2025-11-25 17:00:00', 8, 35);
 
--- RELACIONAMENTO CURSO X ALUNOS
--- (A tabela é: tb_curso_aluno (curso_id, aluno_id))
+-- MATRICULA
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 1, 1, '2025-10-01 16:20:45', 0);
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 3, 1, '2025-10-03 10:22:30', 0);
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 4, 4, '2025-10-10 12:11:00', 1);
 
--- Maria (1), Joana (3), Beto (4) no Java Moderno Online (curso id=1)
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (1, 1);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (1, 3);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (1, 4);
-
--- Joana (3) e Beto (4) no Python para Dados (curso id=2)
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (2, 3);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (2, 4);
-
--- Maria (1) e Joana (3) em Matemática Aplicada (curso id=3)
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (3, 1);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (3, 3);
-
--- Maria (1), Beto (4) e Joana (3) em Robótica Hands-On (curso id=4)
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (4, 1);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (4, 4);
-INSERT INTO tb_curso_aluno (curso_id, aluno_id) VALUES (4, 3);
+-- PAGAMENTOS
+INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-01 17:02:15', 1, 1, 350.00);
+INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-03 11:05:32', 1, 2, 350.00);
+INSERT INTO tb_pagamento (status, matricula_id, preco) VALUES( 0, 3, 399.00);
