@@ -6,7 +6,16 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_matricula")
+@Table(
+        name = "tb_matricula",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_aluno_curso",
+                columnNames = {
+                        "aluno_id", "curso_id"
+                }
+
+        )
+)
 public class Matricula {
 
     @Id

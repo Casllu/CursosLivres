@@ -11,8 +11,10 @@ import com.estagio.cursosLivres.repositories.CursoRepository;
 import com.estagio.cursosLivres.repositories.MatriculaRepository;
 import com.estagio.cursosLivres.repositories.PagamentoRepository;
 import com.estagio.cursosLivres.repositories.UserRepository;
+import com.estagio.cursosLivres.services.exceptions.DatabaseException;
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,24 +43,31 @@ public class MatriculaService {
     }
 
     public MatriculaDTO findById(Long id) {
-        Matricula matricula = matriculaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        Matricula matricula = matriculaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 
         return new MatriculaDTO(matricula);
     }
 
     public MatriculaDTO novaMatricula(Long alunoId, Long cursoId) {
 
+        Matricula matricula = new Matricula();
+
         User aluno = userRepository.findById(alunoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
         Curso curso = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
 
-        Matricula matricula = new Matricula();
         matricula.setAluno(aluno);
         matricula.setCurso(curso);
         matricula.setDataMatricula(LocalDateTime.now());
         matricula.setStatus(MatriculaStatus.PAGAMENTO_PENDENTE);
-        matricula =  matriculaRepository.save(matricula);
+        try {
+
+            matricula =  matriculaRepository.save(matricula);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Aluno já cadastrado nesse curso");
+        }
 
         Pagamento pagamento = new Pagamento();
         pagamento.setMatricula(matricula);

@@ -9,7 +9,16 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_pagamento")
+@Table(
+        name = "tb_pagamento",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_pagamento_matricula",
+                columnNames = {
+                        "matricula_id"
+                }
+
+        )
+)
 public class Pagamento {
 
     @Id
