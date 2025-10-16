@@ -2,6 +2,7 @@ package com.estagio.cursosLivres.controller;
 
 import com.estagio.cursosLivres.dto.matricula.MatriculaDTO;
 import com.estagio.cursosLivres.dto.matricula.NovaMatriculaRequestDTO;
+import com.estagio.cursosLivres.dto.matricula.NovaMatriculaResponseDTO;
 import com.estagio.cursosLivres.services.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,11 +36,11 @@ public class MatriculaController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO')")
-    public ResponseEntity<MatriculaDTO> novaMatricula(@RequestBody NovaMatriculaRequestDTO dto) {
-        MatriculaDTO matriculaDTO = matriculaService.novaMatricula(dto.getAlunoId(), dto.getCursoId());
+    public ResponseEntity<NovaMatriculaResponseDTO> novaMatricula(@RequestBody NovaMatriculaRequestDTO dto) {
+        NovaMatriculaResponseDTO matriculaDTO = matriculaService.novaMatricula(dto.getAlunoId(), dto.getCursoId());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(matriculaDTO.getId()).toUri();
+                .path("/{id}").buildAndExpand(matriculaDTO.getMatriculaId()).toUri();
 
         return ResponseEntity.created(uri).body(matriculaDTO);
     }

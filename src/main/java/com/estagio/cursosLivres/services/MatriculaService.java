@@ -1,6 +1,7 @@
 package com.estagio.cursosLivres.services;
 
 import com.estagio.cursosLivres.dto.matricula.MatriculaDTO;
+import com.estagio.cursosLivres.dto.matricula.NovaMatriculaResponseDTO;
 import com.estagio.cursosLivres.entities.Curso;
 import com.estagio.cursosLivres.entities.Matricula;
 import com.estagio.cursosLivres.entities.Pagamento;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service
@@ -49,7 +51,7 @@ public class MatriculaService {
         return new MatriculaDTO(matricula);
     }
 
-    public MatriculaDTO novaMatricula(Long alunoId, Long cursoId) {
+    public NovaMatriculaResponseDTO novaMatricula(Long alunoId, Long cursoId) {
 
         Matricula matricula = new Matricula();
 
@@ -71,6 +73,7 @@ public class MatriculaService {
 
         Pagamento pagamento = new Pagamento();
         pagamento.setMatricula(matricula);
+        pagamento.setMoment(Instant.now());
         pagamento.setStatus(PagamentoStatus.AGUARDANDO_PAGAMENTO);
         pagamento.setPreco(matricula.getCurso().getPreco());
         pagamento = pagamentoRepository.save(pagamento);
@@ -78,7 +81,7 @@ public class MatriculaService {
         matricula.setPagamento(pagamento);
         matricula = matriculaRepository.save(matricula);
 
-        return new MatriculaDTO(matricula);
+        return new NovaMatriculaResponseDTO(matricula);
     }
 
     public void copyDtoToEntity(MatriculaDTO matriculaDTO, Matricula matricula) {

@@ -35,6 +35,11 @@ public class Pagamento {
     })
     private Matricula matricula;
 
+    @Column(name = "mercado_pago_id", unique = true)
+    private Long mercadoPagoId;
+
+    private String statusMercadoPago;
+
     public Pagamento() {
     }
 
@@ -83,6 +88,22 @@ public class Pagamento {
 
     public void setMatricula(Matricula matricula) {
         this.matricula = matricula;
+    }
+
+    public Long getMercadoPagoId() {
+        return mercadoPagoId;
+    }
+
+    public void setMercadoPagoId(Long mercadoPagoId) {
+        this.mercadoPagoId = mercadoPagoId;
+    }
+
+    public String getStatusMercadoPago() {
+        return statusMercadoPago;
+    }
+
+    public void setStatusMercadoPago(String statusMercadoPago) {
+        this.statusMercadoPago = statusMercadoPago;
     }
 
     @Override
