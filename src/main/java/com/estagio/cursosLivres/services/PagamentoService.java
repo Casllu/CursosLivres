@@ -31,12 +31,17 @@ public class PagamentoService {
     private PagamentoRepository pagamentoRepository;
 
     @Autowired
-    private MatriculaRepository matriculaRepository;
+    private MatriculaService matriculaService;
+
+    @Transactional(readOnly = true)
+    public Pagamento buscarPagamento(Long id) {
+        return pagamentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento inexistente"));
+    }
 
     @Transactional
     public PagamentoResponseDTO processarPagamento(PagamentoCartaoDTO dto) {
-        Matricula matricula = matriculaRepository.findById(dto.getMatriculaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
+        Matricula matricula = matriculaService.buscarMatricula(dto.getMatriculaId());
 
         try {
 
@@ -62,12 +67,14 @@ public class PagamentoService {
 
             Payment createdPayment = paymentClient.create(paymentCreateRequest);
 
-            atualizarDadosMatriculaPagamento(dto.getMatriculaId(), createdPayment.getId(), createdPayment.getStatus());
+            atualizarDadosPagamento(matricula.getPagamento(), createdPayment);
+            String mensagemUsuario = montarMensagemParaUsuario(createdPayment);
 
             return new PagamentoResponseDTO(
                     createdPayment.getId(),
                     createdPayment.getStatus(),
-                    createdPayment.getStatusDetail()
+                    createdPayment.getStatusDetail(),
+                    mensagemUsuario
             );
 
         } catch (MPApiException apiException) {
@@ -80,20 +87,61 @@ public class PagamentoService {
     }
 
     @Transactional
-    public void atualizarDadosMatriculaPagamento(Long matriculaId, Long mercadoPagoId, String statusMercadoPago) {
-        Matricula matricula = matriculaRepository.findById(matriculaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
+    public void atualizarDadosPagamento(Pagamento pagamento,  Payment payment) {
+        String status = payment.getStatus();
 
-        matricula.setDataMatricula(LocalDateTime.now());
-        matricula.setStatus(MatriculaStatus.ATIVA);
-        matriculaRepository.save(matricula);
+        switch (status) {
+            case "approved":
+                pagamento.setStatus(PagamentoStatus.CONFIRMADO);
+                pagamento.setMoment(Instant.now());
+                pagamento.setMercadoPagoId(payment.getId());
 
-        Pagamento pagamento = pagamentoRepository.findByMatriculaId(matriculaId);
+                matriculaService.atualizarDadosMatricula(pagamento.getMatricula(), MatriculaStatus.ATIVA);
+                break;
+            case "pending":
+            case "in_process":
+                pagamento.setStatus(PagamentoStatus.PENDENTE);
+                // informar usuário, aguardar confirmação/futuro webhook
+                break;
+            case "rejected":
+                pagamento.setStatus(PagamentoStatus.REJEITADO);
+                // informar usuário, permitir tentar novamente
+                break;
+            case "cancelled":
+                pagamento.setStatus(PagamentoStatus.CANCELADO);
+                break;
+            case "refunded":
+                pagamento.setStatus(PagamentoStatus.ESTORNADO);
+                // suspender acesso se necessário
+                break;
+            case "charged_back":
+            case "in_mediation":
+                pagamento.setStatus(PagamentoStatus.LITIGIO);
+                // pausar acesso, informar equipe de suporte
+                break;
+            default:
+                // fallback seguro (pode logar para análise)
+                pagamento.setStatus(PagamentoStatus.AGUARDANDO);
+        }
 
-        pagamento.setMoment(Instant.now());
-        pagamento.setStatus(PagamentoStatus.CONFIRMADO);
-        pagamento.setMercadoPagoId(mercadoPagoId);
-        pagamento.setStatusMercadoPago(statusMercadoPago);
         pagamentoRepository.save(pagamento);
+    }
+
+    private String montarMensagemParaUsuario(Payment payment) {
+        switch (payment.getStatus()) {
+            case "approved":
+                return "Pagamento aprovado! Seu acesso foi liberado.";
+            case "in_process":
+            case "pending":
+                return "Seu pagamento está sendo processado. Assim que for confirmado, você receberá um e-mail.";
+            case "rejected":
+                return "Pagamento recusado. Verifique os dados do cartão ou tente outro método.";
+            case "cancelled":
+                return "O pagamento foi cancelado.";
+            case "refunded":
+                return "O pagamento foi estornado. Seu acesso foi suspenso até confirmarmos o reembolso.";
+            default:
+                return "O pagamento está em análise. Aguarde atualização.";
+        }
     }
 }

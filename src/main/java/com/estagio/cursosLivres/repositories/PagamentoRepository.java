@@ -4,5 +4,5 @@ import com.estagio.cursosLivres.entities.Pagamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
-    Pagamento findByMatriculaId(Long matriculaId);
+//    Pagamento findByMatriculaId(Long matriculaId);
 }

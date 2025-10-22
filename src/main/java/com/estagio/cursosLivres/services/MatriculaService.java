@@ -19,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class MatriculaService {
 
     public MatriculaDTO findById(Long id) {
         Matricula matricula = matriculaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
 
         return new MatriculaDTO(matricula);
     }
@@ -65,7 +66,6 @@ public class MatriculaService {
         matricula.setDataMatricula(LocalDateTime.now());
         matricula.setStatus(MatriculaStatus.PAGAMENTO_PENDENTE);
         try {
-
             matricula =  matriculaRepository.save(matricula);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Aluno já cadastrado nesse curso");
@@ -74,7 +74,7 @@ public class MatriculaService {
         Pagamento pagamento = new Pagamento();
         pagamento.setMatricula(matricula);
         pagamento.setMoment(Instant.now());
-        pagamento.setStatus(PagamentoStatus.AGUARDANDO_PAGAMENTO);
+        pagamento.setStatus(PagamentoStatus.AGUARDANDO);
         pagamento.setPreco(matricula.getCurso().getPreco());
         pagamento = pagamentoRepository.save(pagamento);
 
@@ -82,6 +82,19 @@ public class MatriculaService {
         matricula = matriculaRepository.save(matricula);
 
         return new NovaMatriculaResponseDTO(matricula);
+    }
+
+    @Transactional(readOnly = true)
+    public Matricula buscarMatricula(Long matriculaId) {
+        return matriculaRepository.findById(matriculaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
+    }
+
+    @Transactional
+    public void atualizarDadosMatricula(Matricula matricula, MatriculaStatus matriculaStatus) {
+        matricula.setStatus(matriculaStatus);
+        matricula.setDataMatricula(LocalDateTime.now());
+        matriculaRepository.save(matricula);
     }
 
     public void copyDtoToEntity(MatriculaDTO matriculaDTO, Matricula matricula) {
@@ -95,4 +108,6 @@ public class MatriculaService {
         matricula.setDataMatricula(matriculaDTO.getDataMatricula());
         matricula.setStatus(matriculaDTO.getStatus());
     }
+
+
 }

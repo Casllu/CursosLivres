@@ -5,11 +5,13 @@ public class PagamentoResponseDTO {
     private Long id;
     private String status;
     private String detalhe;
+    private String message;
 
-    public PagamentoResponseDTO(Long id, String status, String detalhe) {
+    public PagamentoResponseDTO(Long id, String status, String detalhe, String message) {
         this.id = id;
         this.status = status;
         this.detalhe = detalhe;
+        this.message = message;
     }
 
     public Long getId() {
@@ -34,5 +36,13 @@ public class PagamentoResponseDTO {
 
     public void setDetalhe(String detalhe) {
         this.detalhe = detalhe;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
