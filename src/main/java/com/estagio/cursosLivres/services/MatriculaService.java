@@ -85,7 +85,7 @@ public class MatriculaService {
     }
 
     @Transactional(readOnly = true)
-    public Matricula buscarMatricula(Long matriculaId) {
+    protected Matricula buscarMatricula(Long matriculaId) {
         return matriculaRepository.findById(matriculaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
     }

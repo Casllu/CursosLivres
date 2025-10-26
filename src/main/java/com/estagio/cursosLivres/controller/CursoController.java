@@ -4,6 +4,7 @@ import com.estagio.cursosLivres.dto.curso.CursoDTO;
 import com.estagio.cursosLivres.dto.curso.CursoOnlineDTO;
 import com.estagio.cursosLivres.dto.curso.CursoPresencialDTO;
 import com.estagio.cursosLivres.services.CursoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +63,7 @@ public class CursoController {
 
     @PostMapping(value = "/online")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoOnlineDTO> insertCursoOnline(@RequestBody CursoOnlineDTO dto) {
+    public ResponseEntity<CursoOnlineDTO> insertCursoOnline(@RequestBody @Valid CursoOnlineDTO dto) {
         CursoOnlineDTO newDto = cursoService.insertCursoOnline(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -73,7 +74,7 @@ public class CursoController {
 
     @PostMapping(value = "/presencial")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoPresencialDTO> insertCursoPresencial(@RequestBody CursoPresencialDTO dto) {
+    public ResponseEntity<CursoPresencialDTO> insertCursoPresencial(@RequestBody @Valid CursoPresencialDTO dto) {
         CursoPresencialDTO newDto = cursoService.insertCursoPresencial(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -84,7 +85,7 @@ public class CursoController {
 
     @PutMapping(value = "/online/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoOnlineDTO> updateCursoOnline(@PathVariable Long id, @RequestBody CursoOnlineDTO dto) {
+    public ResponseEntity<CursoOnlineDTO> updateCursoOnline(@PathVariable Long id, @RequestBody @Valid CursoOnlineDTO dto) {
         CursoOnlineDTO newDto = cursoService.updateCursoOnline(id, dto);
 
         return ResponseEntity.ok().body(newDto);
@@ -92,7 +93,7 @@ public class CursoController {
 
     @PutMapping(value = "/presencial/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoPresencialDTO> updateCursoPresencial(@PathVariable Long id, @RequestBody CursoPresencialDTO dto) {
+    public ResponseEntity<CursoPresencialDTO> updateCursoPresencial(@PathVariable Long id, @RequestBody @Valid CursoPresencialDTO dto) {
         CursoPresencialDTO newDto = cursoService.updateCursoPresencial(id, dto);
 
         return ResponseEntity.ok().body(newDto);

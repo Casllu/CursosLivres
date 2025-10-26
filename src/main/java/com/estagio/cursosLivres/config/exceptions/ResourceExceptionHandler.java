@@ -1,5 +1,7 @@
 package com.estagio.cursosLivres.config.exceptions;
 
+import com.estagio.cursosLivres.dto.error.CustomErrorDTO;
+import com.estagio.cursosLivres.dto.error.ValidationErrorDTO;
 import com.estagio.cursosLivres.services.exceptions.BusinessException;
 import com.estagio.cursosLivres.services.exceptions.DatabaseException;
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
@@ -19,41 +21,24 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Resource Not Found");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), "Resource Not Found", e.getMessage(),request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);
-
     }
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Database exception");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), "Database exception", e.getMessage(),request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
+    public ResponseEntity<CustomErrorDTO> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-        ValidationError err = new ValidationError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Database exception");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
-
-        for (FieldError f : e.getFieldErrors()) {
+        ValidationErrorDTO err = new ValidationErrorDTO(Instant.now(), status.value(), "Dados inválidos", request.getRequestURI());
+        for (FieldError f : e.getBindingResult().getFieldErrors()) {
             err.addError(f.getField(), f.getDefaultMessage());
         }
 
@@ -63,12 +48,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<StandardError> business(BusinessException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Business exception");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), "Business exception", e.getMessage(),request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);
     }

@@ -161,63 +161,30 @@ public class CursoService {
 
     private void copyCursoOnlineDtoToEntity(CursoOnlineDTO dto, CursoOnline entity) {
 
-        if(dto.getNome() != null) {
-            entity.setNome(dto.getNome());
-        }
-        if(dto.getDescricao() != null) {
-            entity.setDescricao(dto.getDescricao());
-        }
-        if (dto.getCargaHoraria() != null) {
-            entity.setCargaHoraria(dto.getCargaHoraria());
-        }
-        if(dto.getPreco() != null) {
-            entity.setPreco(dto.getPreco());
-        }
-        if(dto.isCertificadoDisponivel() != null) {
-            entity.setCertificadoDisponivel(dto.isCertificadoDisponivel());
-        }
-        if(dto.getValidadeDias() != null) {
-            entity.setValidadeDias(dto.getValidadeDias());
-        }
-        if(dto.getQtdAulas() != null) {
-            entity.setQtdAulas(dto.getQtdAulas());
-        }
-        if(dto.getQtdCapitulos() != null) {
-            entity.setQtdCapitulos(dto.getQtdCapitulos());
-        }
+        entity.setNome(dto.getNome());
+        entity.setDescricao(dto.getDescricao());
+        entity.setCargaHoraria(dto.getCargaHoraria());
+        entity.setPreco(dto.getPreco());
+        entity.setCertificadoDisponivel(dto.isCertificadoDisponivel());
+        entity.setValidadeDias(dto.getValidadeDias());
+        entity.setQtdAulas(dto.getQtdAulas());
+        entity.setQtdCapitulos(dto.getQtdCapitulos());
+
     }
 
     private void copyCursoPresencialDtoToEntity(CursoPresencialDTO dto, CursoPresencial entity) {
-        if (dto.getNome() != null) {
-            entity.setNome(dto.getNome());
-        }
-        if (dto.getDescricao() != null) {
-            entity.setDescricao(dto.getDescricao());
-        }
-        if (dto.getCargaHoraria() != null) {
-            entity.setCargaHoraria(dto.getCargaHoraria());
-        }
-        if (dto.getPreco() != null) {
-            entity.setPreco(dto.getPreco());
-        }
-        if (dto.isCertificadoDisponivel() != null) {
-            entity.setCertificadoDisponivel(dto.isCertificadoDisponivel());
-        }
-        if (dto.getLocal() != null) {
-            entity.setLocal(dto.getLocal());
-        }
-        if (dto.getDataInicio() != null) {
-            entity.setDataInicio(dto.getDataInicio());
-        }
-        if (dto.getDataFim() != null) {
-            entity.setDataFim(dto.getDataFim());
-        }
-        if (dto.getMinAlunos() != null) {
-            entity.setMinAlunos(dto.getMinAlunos());
-        }
-        if (dto.getMaxAlunos() != null) {
-            entity.setMaxAlunos(dto.getMaxAlunos());
-        }
+
+        entity.setNome(dto.getNome());
+        entity.setDescricao(dto.getDescricao());
+        entity.setCargaHoraria(dto.getCargaHoraria());
+        entity.setPreco(dto.getPreco());
+        entity.setCertificadoDisponivel(dto.isCertificadoDisponivel());
+        entity.setLocal(dto.getLocal());
+        entity.setDataInicio(dto.getDataInicio());
+        entity.setDataFim(dto.getDataFim());
+        entity.setMinAlunos(dto.getMinAlunos());
+        entity.setMaxAlunos(dto.getMaxAlunos());
+
     }
 
 
