@@ -1,11 +1,11 @@
 package com.estagio.cursosLivres.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_curso_presencial")
@@ -17,6 +17,8 @@ public class CursoPresencial extends Curso{
     private LocalDateTime dataFim;
     private Integer minAlunos;
     private Integer maxAlunos;
+    @OneToOne(mappedBy = "cursoPresencial", cascade = CascadeType.ALL)
+    private ProgressoCursoPresencial progressoCursoPresencial ;
 
     public CursoPresencial() {}
 

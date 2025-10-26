@@ -16,6 +16,10 @@ public class ProgressoCursoPresencial {
 
     private LocalDateTime ultimaAtualizacao;
 
+    @OneToOne
+    @JoinColumn(name = "curso_id")
+    private CursoPresencial cursoPresencial;
+
     public ProgressoCursoPresencial(Long id, Double percentual, LocalDateTime ultimaAtualizacao) {
         this.id = id;
         this.percentual = percentual;
@@ -46,5 +50,13 @@ public class ProgressoCursoPresencial {
 
     public void setUltimaAtualizacao(LocalDateTime ultimaAtualizacao) {
         this.ultimaAtualizacao = ultimaAtualizacao;
+    }
+
+    public CursoPresencial getCursoPresencial() {
+        return cursoPresencial;
+    }
+
+    public void setCursoPresencial(CursoPresencial cursoPresencial) {
+        this.cursoPresencial = cursoPresencial;
     }
 }
