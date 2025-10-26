@@ -63,7 +63,7 @@ public class CursoController {
 
     @PostMapping(value = "/online")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoOnlineDTO> insertCursoOnline(@RequestBody @Valid CursoOnlineDTO dto) {
+    public ResponseEntity<CursoOnlineDTO> insertCursoOnline(@Valid @RequestBody CursoOnlineDTO dto) {
         CursoOnlineDTO newDto = cursoService.insertCursoOnline(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -74,7 +74,7 @@ public class CursoController {
 
     @PostMapping(value = "/presencial")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoPresencialDTO> insertCursoPresencial(@RequestBody @Valid CursoPresencialDTO dto) {
+    public ResponseEntity<CursoPresencialDTO> insertCursoPresencial(@Valid @RequestBody CursoPresencialDTO dto) {
         CursoPresencialDTO newDto = cursoService.insertCursoPresencial(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -85,7 +85,7 @@ public class CursoController {
 
     @PutMapping(value = "/online/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoOnlineDTO> updateCursoOnline(@PathVariable Long id, @RequestBody @Valid CursoOnlineDTO dto) {
+    public ResponseEntity<CursoOnlineDTO> updateCursoOnline(@PathVariable Long id, @Valid @RequestBody CursoOnlineDTO dto) {
         CursoOnlineDTO newDto = cursoService.updateCursoOnline(id, dto);
 
         return ResponseEntity.ok().body(newDto);
@@ -93,7 +93,7 @@ public class CursoController {
 
     @PutMapping(value = "/presencial/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<CursoPresencialDTO> updateCursoPresencial(@PathVariable Long id, @RequestBody @Valid CursoPresencialDTO dto) {
+    public ResponseEntity<CursoPresencialDTO> updateCursoPresencial(@PathVariable Long id, @Valid @RequestBody CursoPresencialDTO dto) {
         CursoPresencialDTO newDto = cursoService.updateCursoPresencial(id, dto);
 
         return ResponseEntity.ok().body(newDto);

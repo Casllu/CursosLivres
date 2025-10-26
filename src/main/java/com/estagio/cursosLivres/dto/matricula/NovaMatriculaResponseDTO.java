@@ -1,7 +1,7 @@
 package com.estagio.cursosLivres.dto.matricula;
 
 import com.estagio.cursosLivres.dto.curso.CursoMatriculaResponseDTO;
-import com.estagio.cursosLivres.dto.pagamento.PagamentoDTO;
+import com.estagio.cursosLivres.dto.pagamento.PagamentoMatriculaResponseDTO;
 import com.estagio.cursosLivres.dto.user.UserMinDTO;
 import com.estagio.cursosLivres.entities.Matricula;
 import com.estagio.cursosLivres.entities.utils.MatriculaStatus;
@@ -19,7 +19,7 @@ public class NovaMatriculaResponseDTO {
     @NotNull
     private LocalDateTime dataMatricula;
     private MatriculaStatus status;
-    private PagamentoDTO pagamento;
+    private PagamentoMatriculaResponseDTO pagamento;
 
     public NovaMatriculaResponseDTO() {
     }
@@ -30,7 +30,7 @@ public class NovaMatriculaResponseDTO {
         curso = new CursoMatriculaResponseDTO(entity.getCurso());
         dataMatricula = entity.getDataMatricula();
         status = entity.getStatus();
-        pagamento = new PagamentoDTO(entity.getPagamento());
+        pagamento = new PagamentoMatriculaResponseDTO(entity.getPagamento());
     }
 
     public Long getMatriculaId() {
@@ -73,11 +73,11 @@ public class NovaMatriculaResponseDTO {
         this.status = status;
     }
 
-    public PagamentoDTO getPagamento() {
+    public PagamentoMatriculaResponseDTO getPagamento() {
         return pagamento;
     }
 
-    public void setPagamento(PagamentoDTO pagamento) {
+    public void setPagamento(PagamentoMatriculaResponseDTO pagamento) {
         this.pagamento = pagamento;
     }
 }

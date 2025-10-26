@@ -1,6 +1,6 @@
 package com.estagio.cursosLivres.services;
 
-import com.estagio.cursosLivres.dto.matricula.MatriculaDTO;
+import com.estagio.cursosLivres.dto.matricula.MatriculaResponseDTO;
 import com.estagio.cursosLivres.dto.matricula.NovaMatriculaResponseDTO;
 import com.estagio.cursosLivres.entities.Curso;
 import com.estagio.cursosLivres.entities.Matricula;
@@ -39,17 +39,17 @@ public class MatriculaService {
     @Autowired
     private PagamentoRepository pagamentoRepository;
 
-    public Page<MatriculaDTO> findAll(Pageable pageable) {
+    public Page<MatriculaResponseDTO> findAll(Pageable pageable) {
         Page<Matricula> matriculas = matriculaRepository.findAll(pageable);
 
-        return matriculas.map(MatriculaDTO :: new);
+        return matriculas.map(MatriculaResponseDTO:: new);
     }
 
-    public MatriculaDTO findById(Long id) {
+    public MatriculaResponseDTO findById(Long id) {
         Matricula matricula = matriculaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
 
-        return new MatriculaDTO(matricula);
+        return new MatriculaResponseDTO(matricula);
     }
 
     public NovaMatriculaResponseDTO novaMatricula(Long alunoId, Long cursoId) {
@@ -97,16 +97,16 @@ public class MatriculaService {
         matriculaRepository.save(matricula);
     }
 
-    public void copyDtoToEntity(MatriculaDTO matriculaDTO, Matricula matricula) {
-        matricula.setId(matriculaDTO.getId());
+    public void copyDtoToEntity(MatriculaResponseDTO matriculaResponseDTO, Matricula matricula) {
+        matricula.setId(matriculaResponseDTO.getId());
         User aluno = new User();
-        aluno.setId(matriculaDTO.getAluno().getId());
+        aluno.setId(matriculaResponseDTO.getAluno().getId());
         matricula.setAluno(aluno);
         Curso curso = new Curso();
-        curso.setId(matriculaDTO.getCurso().getId());
+        curso.setId(matriculaResponseDTO.getCurso().getId());
         matricula.setCurso(curso);
-        matricula.setDataMatricula(matriculaDTO.getDataMatricula());
-        matricula.setStatus(matriculaDTO.getStatus());
+        matricula.setDataMatricula(matriculaResponseDTO.getDataMatricula());
+        matricula.setStatus(matriculaResponseDTO.getStatus());
     }
 
 

@@ -1,8 +1,12 @@
 package com.estagio.cursosLivres.dto.matricula;
 
+import jakarta.validation.constraints.NotNull;
+
 public class NovaMatriculaRequestDTO {
 
+    @NotNull
     private Long alunoId;
+    @NotNull
     private Long cursoId;
 
     public Long getAlunoId() {

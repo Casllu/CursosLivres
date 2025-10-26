@@ -3,6 +3,7 @@ package com.estagio.cursosLivres.controller;
 import com.estagio.cursosLivres.dto.pagamento.PagamentoCartaoDTO;
 import com.estagio.cursosLivres.dto.pagamento.PagamentoResponseDTO;
 import com.estagio.cursosLivres.services.PagamentoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class PagamentoController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO')")
-    public ResponseEntity<PagamentoResponseDTO> efetuarPagamento(@RequestBody PagamentoCartaoDTO pagamentoCartaoDTO) {
+    public ResponseEntity<PagamentoResponseDTO> efetuarPagamento(@Valid @RequestBody PagamentoCartaoDTO pagamentoCartaoDTO) {
         PagamentoResponseDTO dto = pagamentoService.processarPagamento(pagamentoCartaoDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

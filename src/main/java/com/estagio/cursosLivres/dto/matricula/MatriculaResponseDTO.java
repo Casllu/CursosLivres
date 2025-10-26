@@ -1,7 +1,7 @@
 package com.estagio.cursosLivres.dto.matricula;
 
 import com.estagio.cursosLivres.dto.curso.CursoDTO;
-import com.estagio.cursosLivres.dto.pagamento.PagamentoDTO;
+import com.estagio.cursosLivres.dto.pagamento.PagamentoMatriculaResponseDTO;
 import com.estagio.cursosLivres.dto.user.UserMinDTO;
 import com.estagio.cursosLivres.entities.Matricula;
 import com.estagio.cursosLivres.entities.utils.MatriculaStatus;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public class MatriculaDTO {
+public class MatriculaResponseDTO {
 
     private Long id;
     @NotNull
@@ -19,11 +19,11 @@ public class MatriculaDTO {
     @NotNull
     private LocalDateTime dataMatricula;
     private MatriculaStatus status;
-    private PagamentoDTO pagamento;
+    private PagamentoMatriculaResponseDTO pagamento;
 
-    public MatriculaDTO() {}
+    public MatriculaResponseDTO() {}
 
-    public MatriculaDTO(Long id, UserMinDTO aluno, CursoDTO curso, LocalDateTime dataMatricula, MatriculaStatus status) {
+    public MatriculaResponseDTO(Long id, UserMinDTO aluno, CursoDTO curso, LocalDateTime dataMatricula, MatriculaStatus status) {
         this.id = id;
         this.aluno = aluno;
         this.curso = curso;
@@ -31,13 +31,13 @@ public class MatriculaDTO {
         this.status = status;
     }
 
-    public MatriculaDTO(Matricula entity) {
+    public MatriculaResponseDTO(Matricula entity) {
         id = entity.getId();
         aluno = new UserMinDTO(entity.getAluno());
         curso = new CursoDTO(entity.getCurso());
         dataMatricula = entity.getDataMatricula();
         status = entity.getStatus();
-        pagamento = entity.getPagamento() != null ? new PagamentoDTO(entity.getPagamento()) : null;
+        pagamento = entity.getPagamento() != null ? new PagamentoMatriculaResponseDTO(entity.getPagamento()) : null;
     }
 
     public Long getId() {
@@ -80,11 +80,11 @@ public class MatriculaDTO {
         this.status = status;
     }
 
-    public PagamentoDTO getPagamento() {
+    public PagamentoMatriculaResponseDTO getPagamento() {
         return pagamento;
     }
 
-    public void setPagamento(PagamentoDTO pagamento) {
+    public void setPagamento(PagamentoMatriculaResponseDTO pagamento) {
         this.pagamento = pagamento;
     }
 }

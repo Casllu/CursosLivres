@@ -1,12 +1,11 @@
 package com.estagio.cursosLivres.dto.pagamento;
 
-import com.estagio.cursosLivres.dto.matricula.MatriculaDTO;
 import com.estagio.cursosLivres.entities.Pagamento;
 import com.estagio.cursosLivres.entities.utils.PagamentoStatus;
 
 import java.time.Instant;
 
-public class PagamentoDTO {
+public class PagamentoMatriculaResponseDTO {
 
     private Long id;
 
@@ -14,15 +13,15 @@ public class PagamentoDTO {
 
     private PagamentoStatus status;
 
-    public PagamentoDTO() {}
+    public PagamentoMatriculaResponseDTO() {}
 
-    public PagamentoDTO(Long id, Instant moment, PagamentoStatus status) {
+    public PagamentoMatriculaResponseDTO(Long id, Instant moment, PagamentoStatus status) {
         this.id = id;
         this.moment = moment;
         this.status = status;
     }
 
-    public PagamentoDTO(Pagamento entity) {
+    public PagamentoMatriculaResponseDTO(Pagamento entity) {
         id = entity.getId();
         moment = entity.getMoment();
         status = entity.getStatus();
