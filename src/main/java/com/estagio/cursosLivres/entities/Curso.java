@@ -3,7 +3,9 @@ package com.estagio.cursosLivres.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,6 +29,9 @@ public class Curso {
 
     @OneToMany(mappedBy = "curso")
     private Set<Matricula> matriculas = new HashSet<>();
+
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Arquivo> arquivos = new ArrayList<>();
 
     public Curso() {
     }
@@ -102,5 +107,17 @@ public class Curso {
 
     public void setProfessor(User professor) {
         this.professor = professor;
+    }
+
+    public Boolean getCertificadoDisponivel() {
+        return certificadoDisponivel;
+    }
+
+    public List<Arquivo> getArquivos() {
+        return arquivos;
+    }
+
+    public void setArquivos(List<Arquivo> arquivos) {
+        this.arquivos = arquivos;
     }
 }

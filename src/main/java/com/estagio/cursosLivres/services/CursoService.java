@@ -51,19 +51,19 @@ public class CursoService {
 
     @Transactional(readOnly = true)
     public CursoDTO findById(Long id) {
-        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         return new CursoDTO(curso);
     }
 
     @Transactional(readOnly = true)
     public CursoOnlineDTO findCursoOnlineById(Long id) {
-        CursoOnline curso = cursoRepository.findCursoOnlineById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        CursoOnline curso = cursoRepository.findCursoOnlineById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         return new CursoOnlineDTO(curso);
     }
 
     @Transactional(readOnly = true)
     public CursoPresencialDTO findCursoPresencialById(Long id) {
-        CursoPresencial curso = cursoRepository.findCursoPresenciaById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        CursoPresencial curso = cursoRepository.findCursoPresenciaById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         return new CursoPresencialDTO(curso);
     }
 
@@ -159,6 +159,12 @@ public class CursoService {
 
     }
 
+    public Curso buscarCurso(Long cursoId) {
+        return cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
+
+    }
+
     private void copyCursoOnlineDtoToEntity(CursoOnlineDTO dto, CursoOnline entity) {
 
         entity.setNome(dto.getNome());
@@ -186,6 +192,7 @@ public class CursoService {
         entity.setMaxAlunos(dto.getMaxAlunos());
 
     }
+
 
 
 }

@@ -26,7 +26,7 @@ public class Matricula {
     @JoinColumn(name = "aluno_id")
     private User aluno;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curso_id")
     private Curso curso;
 

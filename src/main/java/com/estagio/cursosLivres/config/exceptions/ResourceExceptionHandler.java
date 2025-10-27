@@ -4,6 +4,7 @@ import com.estagio.cursosLivres.dto.error.CustomErrorDTO;
 import com.estagio.cursosLivres.dto.error.ValidationErrorDTO;
 import com.estagio.cursosLivres.services.exceptions.BusinessException;
 import com.estagio.cursosLivres.services.exceptions.DatabaseException;
+import com.estagio.cursosLivres.services.exceptions.ForbiddenException;
 import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.time.Instant;
 
 @ControllerAdvice
@@ -50,6 +52,21 @@ public class ResourceExceptionHandler {
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
         StandardError err = new StandardError(Instant.now(), status.value(), "Business exception", e.getMessage(),request.getRequestURI());
 
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<StandardError> io(Exception e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(Instant.now(), status.value(), "Internal Server Error", e.getMessage(),request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomErrorDTO> forbidden(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 }
