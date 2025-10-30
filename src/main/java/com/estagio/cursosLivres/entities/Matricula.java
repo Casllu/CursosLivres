@@ -31,6 +31,8 @@ public class Matricula {
     private Curso curso;
 
     private LocalDateTime dataMatricula;
+
+    @Enumerated(EnumType.STRING)
     private MatriculaStatus status;
 
     @OneToOne(mappedBy = "matricula", cascade = CascadeType.ALL)

@@ -10,9 +10,10 @@ import com.estagio.cursosLivres.projections.UserDetailsProjection;
 import com.estagio.cursosLivres.repositories.RoleRepository;
 import com.estagio.cursosLivres.repositories.UserRepository;
 import com.estagio.cursosLivres.services.exceptions.DatabaseException;
-import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
+import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;import com.estagio.cursosLivres.util.CustomUserUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    @Lazy
     private AuthService authService;
 
     @Autowired

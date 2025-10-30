@@ -52,11 +52,11 @@ INSERT INTO tb_curso (nome, descricao, carga_horaria, preco, certificado_disponi
 INSERT INTO tb_curso_presencial (id, local, data_inicio, data_fim, min_alunos, max_alunos) VALUES (4, 'Lab 2 - Bloco B', '2025-11-03 10:00:00', '2025-11-25 17:00:00', 8, 35);
 
 -- MATRICULA
-INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 1, 1, '2025-10-01 16:20:45', 0);
-INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 3, 1, '2025-10-03 10:22:30', 0);
-INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 4, 4, '2025-10-10 12:11:00', 1);
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 1, 1, '2025-10-01 16:20:45', 'ATIVA');
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 3, 1, '2025-10-03 10:22:30', 'ATIVA');
+INSERT INTO tb_matricula (aluno_id, curso_id, data_matricula, status) VALUES ( 4, 4, '2025-10-10 12:11:00', 'PAGAMENTO_PENDENTE');
 
 -- PAGAMENTOS
-INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-01 17:02:15', 1, 1, 350.00);
-INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-03 11:05:32', 1, 2, 350.00);
-INSERT INTO tb_pagamento (status, matricula_id, preco) VALUES( 0, 3, 399.00);
+INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-01 17:02:15', 'CONFIRMADO', 1, 350.00);
+INSERT INTO tb_pagamento (moment, status, matricula_id, preco) VALUES('2025-10-03 11:05:32', 'CONFIRMADO', 2, 350.00);
+INSERT INTO tb_pagamento (status, matricula_id, preco) VALUES( 'AGUARDANDO', 3, 399.00);

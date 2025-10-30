@@ -2,7 +2,8 @@ package com.estagio.cursosLivres.controller;
 
 import com.estagio.cursosLivres.dto.arquivo.NovoArquivoRequestDTO;
 import com.estagio.cursosLivres.dto.arquivo.NovoArquivoResponseDTO;
-import com.estagio.cursosLivres.entities.utils.TipoArquivo;
+import com.estagio.cursosLivres.dto.arquivo.RequestSignedArquivoDTO;
+import com.estagio.cursosLivres.dto.arquivo.ResponseSignedArquivoDTO;
 import com.estagio.cursosLivres.services.ArquivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.time.Duration;
 import java.util.Map;
 
 @RestController
@@ -31,17 +31,16 @@ public class ArquivoController {
         NovoArquivoResponseDTO dto = arquivoService.uploadVideo(file, novoArquivoRequestDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(dto.getId()).toUri();
+                .path("/{id}").buildAndExpand(dto.id()).toUri();
 
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @GetMapping("/{cursoId}/{videoFile}/url")
-    public ResponseEntity<?> getSignedVideoUrl(@PathVariable Long matriculaId,
-                                               @PathVariable String titulo) {
+    @GetMapping("/url")
+    public ResponseEntity<ResponseSignedArquivoDTO> getSignedVideoUrl(@RequestBody RequestSignedArquivoDTO dto) {
 
-        String signedUrl = arquivoService.gerarSignedUrl(matriculaId, titulo);
+        ResponseSignedArquivoDTO newDto = arquivoService.gerarSignedUrl(dto);
 
-        return ResponseEntity.ok().body(Map.of("signedUrl", signedUrl));
+        return ResponseEntity.ok().body(newDto);
     }
 }
