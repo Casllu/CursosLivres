@@ -30,6 +30,7 @@ public class MatriculaController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUNO')")
     public ResponseEntity<MatriculaResponseDTO> findById(@PathVariable Long id){
         MatriculaResponseDTO matricula = matriculaService.findById(id);
         return ResponseEntity.ok().body(matricula);

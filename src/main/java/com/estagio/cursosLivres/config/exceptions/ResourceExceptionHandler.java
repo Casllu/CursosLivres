@@ -2,10 +2,7 @@ package com.estagio.cursosLivres.config.exceptions;
 
 import com.estagio.cursosLivres.dto.error.CustomErrorDTO;
 import com.estagio.cursosLivres.dto.error.ValidationErrorDTO;
-import com.estagio.cursosLivres.services.exceptions.BusinessException;
-import com.estagio.cursosLivres.services.exceptions.DatabaseException;
-import com.estagio.cursosLivres.services.exceptions.ForbiddenException;
-import com.estagio.cursosLivres.services.exceptions.ResourceNotFoundException;
+import com.estagio.cursosLivres.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +63,13 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<CustomErrorDTO> forbidden(ForbiddenException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(MercadoPagoException.class)
+    public ResponseEntity<CustomErrorDTO> mercadoPago(MercadoPagoException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

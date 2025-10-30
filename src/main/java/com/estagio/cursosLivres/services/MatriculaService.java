@@ -39,12 +39,14 @@ public class MatriculaService {
     @Autowired
     private PagamentoRepository pagamentoRepository;
 
+    @Transactional(readOnly = true)
     public Page<MatriculaResponseDTO> findAll(Pageable pageable) {
         Page<Matricula> matriculas = matriculaRepository.findAll(pageable);
 
         return matriculas.map(MatriculaResponseDTO:: new);
     }
 
+    @Transactional(readOnly = true)
     public MatriculaResponseDTO findById(Long id) {
         Matricula matricula = matriculaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Matricula inexistente"));
@@ -52,6 +54,7 @@ public class MatriculaService {
         return new MatriculaResponseDTO(matricula);
     }
 
+    @Transactional
     public NovaMatriculaResponseDTO novaMatricula(Long alunoId, Long cursoId) {
 
         Matricula matricula = new Matricula();
